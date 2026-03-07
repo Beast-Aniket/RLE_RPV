@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body p-4">
+        <h4 class="mb-3">Secure Login</h4>
+        <form method="post" class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Username</label>
+            <input class="form-control" name="username" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" name="password" required>
+          </div>
+          <div class="col-12 d-grid">
+            <button class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body small text-muted">
+        <strong>Demo users:</strong><br>
+        CCF: <code>ccf / ccf123</code><br>
+        Clerk: <code>clerk_snt / clerk123</code><br>
+        Admin: <code>admin_snt / admin123</code><br>
+        Final: <code>final_member / final123</code>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
