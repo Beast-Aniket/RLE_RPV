@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Final Marksheet Processing Desk</h3>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label">Session Filter</label>
+        <select class="form-select" name="session_name">
+          <option value="">All Sessions</option>
+          {% for s in sessions %}
+          <option value="{{ s.session_name }}" {% if session_filter==s.session_name %}selected{% endif %}>{{ s.session_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Final State</label>
+        <select class="form-select" name="state">
+          <option value="">All</option>
+          <option value="PENDING" {% if state_filter=='PENDING' %}selected{% endif %}>PENDING</option>
+          <option value="DONE" {% if state_filter=='DONE' %}selected{% endif %}>DONE</option>
+          <option value="QUERY" {% if state_filter=='QUERY' %}selected{% endif %}>QUERY</option>
+        </select>
+      </div>
+      <div class="col-md-3 d-grid">
+        <button class="btn btn-primary">Apply Filters</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">Date-wise & Session-wise Pending Summary</div>
+  <div class="card-body table-responsive">
+    <table class="table table-sm table-striped">
+      <thead><tr><th>Date</th><th>Session</th><th>Total</th><th>Done</th><th>Query</th><th>Pending</th><th>Day Report</th></tr></thead>
+      <tbody>
+      {% for g in grouped %}
+      <tr>
+        <td>{{ g.work_date }}</td>
+        <td>{{ g.session_name }}</td>
+        <td>{{ g.total }}</td>
+        <td>{{ g.done_count }}</td>
+        <td>{{ g.query_count }}</td>
+        <td>{{ g.total - g.done_count - g.query_count }}</td>
+        <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('download_day_report', day=g.work_date) }}">Download CSV</a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>Approved Letters</span>
+    <form id="bulkForm" method="get" action="{{ url_for('download_letters_zip') }}">
+      <input type="hidden" name="ids" id="selectedIds">
+      <button class="btn btn-sm btn-success" type="submit" onclick="collectIds()">Download Selected ZIP</button>
+    </form>
+  </div>
+  <div class="card-body table-responsive">
+    <table class="table table-sm table-striped align-middle">
+      <thead><tr><th>Select</th><th>ID</th><th>Session</th><th>Name</th><th>PRN</th><th>Status</th><th>Final State</th><th>Update</th><th>Letter</th></tr></thead>
+      <tbody>
+      {% for r in rows %}
+      <tr>
+        <td><input type="checkbox" class="letter-id" value="{{ r.id }}"></td>
+        <td>{{ r.id }}</td>
+        <td>{{ r.session_name }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.prn }}</td>
+        <td>{{ r.result_status }}</td>
+        <td><span class="badge text-bg-info">{{ r.final_state }}</span></td>
+        <td>
+          <form method="post" class="d-flex gap-1">
+            <input type="hidden" name="letter_id" value="{{ r.id }}">
+            <select class="form-select form-select-sm" name="final_state">
+              <option {% if r.final_state=='PENDING' %}selected{% endif %}>PENDING</option>
+              <option {% if r.final_state=='DONE' %}selected{% endif %}>DONE</option>
+              <option {% if r.final_state=='QUERY' %}selected{% endif %}>QUERY</option>
+            </select>
+            <input class="form-control form-control-sm" name="final_comment" placeholder="comment / query">
+            <button class="btn btn-sm btn-primary">Save</button>
+          </form>
+        </td>
+        <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('download_letter', letter_id=r.id) }}">Download</a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function collectIds() {
+  const ids = Array.from(document.querySelectorAll('.letter-id:checked')).map(x => x.value);
+  document.getElementById('selectedIds').value = ids.join(',');
+}
+</script>
+{% endblock %}
