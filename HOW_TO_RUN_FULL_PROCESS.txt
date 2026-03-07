@@ -1,0 +1,70 @@
+UNIVERSITY RLE-RPV SYSTEM - FULL RUN PROCESS (STREAMLIT)
+========================================================
+
+1) START APPLICATION
+--------------------
+1. Open terminal in project folder.
+2. Run:
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   streamlit run app.py
+3. Open browser URL shown by Streamlit (typically http://localhost:8501)
+
+2) FIRST LOGIN (CCF)
+--------------------
+Use fixed credentials only:
+- Username: BEAST
+- Password: admin123
+
+3) CCF TASKS
+------------
+A) USER MANAGEMENT
+- Create users (roles: CLERK, ADMIN, FINAL)
+- Assign faculty for CLERK/ADMIN users
+- Modify users (password/role/faculty/active)
+- Disable users
+
+B) EXAM + SESSION SETUP
+- Select an existing exam OR create new exam
+- While creating exam, assign faculty to exam
+- Create session under selected exam
+
+C) RESULT UPLOAD
+- Select session
+- Upload .csv / .xlsx / .dbf
+- Uploaded records become visible only to users of mapped faculty
+
+4) CLERK TASKS (FACULTY-WISE)
+------------------------------
+- Login via CCF-created clerk user
+- Select session for clerk's faculty
+- Search student using PRN or Seat Number
+- Edit sem GPIs, remark, result status
+- For RPV, use eligible toggle
+- Submit request to Admin
+
+5) ADMIN TASKS (FACULTY-WISE)
+------------------------------
+- Login via CCF-created admin user
+- Review request list
+- Approve / Reject / Suggest Edit
+- On approval, student master updates and letter is generated
+
+6) FINAL TASKS
+--------------
+- Login via FINAL role user
+- Review generated letters
+- Update final state: PENDING / DONE / QUERY
+- Download individual letter text file
+
+7) DATABASE ARTIFACTS IN RUN DIRECTORY
+--------------------------------------
+- university_rle_rpv.db (runtime sqlite database)
+- university_rle_rpv_schema.sql (schema file)
+- university_rle_rpv_dump.sql (auto-updated SQL dump)
+
+8) NOTES
+--------
+- CCF account BEAST cannot be removed.
+- If package installation fails due network, install on local machine with internet.
