@@ -1,5 +1,65 @@
+
+1) START
+- python -m venv .venv
+- source .venv/bin/activate
+- pip install -r requirements.txt
+- streamlit run app.py
+
+2) LOGIN
+- Predefined CCF only:
+  username: BEAST
+  password: admin123
+
+3) CCF WORKFLOW
+A. User Management tab
+   - create CLERK/ADMIN/FINAL users
+   - edit users
+   - disable users
+
+B. Session/Exam Upload tab
+   - create session (only session name)
+   - choose faculty
+   - choose exam + program code from dropdown or create new
+   - upload students (.csv/.xlsx/.dbf)
+
+C. Audit tab
+   - view all activity logs
+   - download audit CSV
+
+4) CLERK WORKFLOW
+- login with CCF-created clerk user
+- select session + exam
+- search student by PRN/Seat
+- enter missing GPIs
+- if all GPIs available and remark has RLE, it is auto-removed
+- for RPV, clerk removes remark manually and submits
+
+5) ADMIN WORKFLOW
+- login with CCF-created admin user
+- view all or pending requests
+- filters: date, session, exam, PRN, seat
+- today's report / yesterday's report quick buttons
+- approve/reject/suggest
+- on approve, PDF is generated automatically
+- admin can bulk download PDFs by filters (ZIP)
+
+6) FINAL MEMBER WORKFLOW
+- login with CCF-created FINAL user
+- filter by session/exam/day
+- download filtered entries CSV
+- select multiple requests and mark DONE/PENDING
+- PDF visibility available from approved entries
+
+7) FILES GENERATED
+- university_rle_rpv.db
+- university_rle_rpv_schema.sql
+- university_rle_rpv_dump.sql
+- generated_letters/*.pdf
+
+8) IMPORT STANDARD CUSTOMIZATION
+- edit `import_config.py`
+- change aliases in COLUMN_ALIASES to match your file structure
 RLE-RPV UNIVERSITY PORTAL - FULL PROCESS RUN GUIDE
-==================================================
 
 1) INSTALL + START
 ------------------
