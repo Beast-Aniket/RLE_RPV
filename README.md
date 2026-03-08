@@ -1,40 +1,40 @@
-# University RLE-RPV System (Streamlit, Modular)
+# RLE-RPV University Dashboard (Advanced Flask Version)
 
-This is a modular Streamlit implementation with separate files for each role and utilities.
+This project provides a full role-based university workflow for RLE/RPV correction processing.
 
-## Key changes
-- Fixed predefined CCF login only: `BEAST / admin123`
-- CCF-only user management (create/edit/disable users and assign role/faculty)
-- Session creation without start/end date
-- Upload flow includes exam name + program code management
-- Faculty-scoped data visibility
-- Clerk auto-removes `RLE` remark when all GPIs are entered
-- Admin advanced filters + PRN/Seat search + PDF generation + bulk PDF ZIP download
-- Final member filters + export filtered data + bulk mark done/pending
-- Separate file for import standards (`import_config.py`)
-- Separate file for PDF generation (`pdf_generator.py`)
+## Core modules implemented
+- CCF Control Center: session creation, faculty-wise upload, SQL dump export, audit logs
+- Faculty Clerk Desk: search PRN/Seat, edit sem GPIs, RLE/RPV handling, submit/resubmit requests
+- Faculty Admin Desk: filter by status, approve/reject/suggest edits, letter generation
+- Final Processing Desk: date/session summary, final state updates, bulk letter download, day report CSV
 
-## Run
+## Database artifacts created in running directory
+When app starts, it creates:
+- `rle_rpv.db` (SQLite operational database)
+- `rle_rpv_schema.sql` (schema SQL file)
+- `rle_rpv_dump.sql` (full SQL dump updated after each write action)
+
+## Quick run
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-streamlit run app.py
+python app.py
 ```
+Open `http://localhost:5000`
 
-## Modules
-- `app.py` -> entrypoint + routing by role
-- `db.py` -> schema/bootstrap/db dump
-- `auth.py` -> password hashing
-- `pages_ccf.py` -> CCF dashboard
-- `pages_clerk.py` -> clerk dashboard
-- `pages_admin.py` -> admin dashboard
-- `pages_final.py` -> final member dashboard
-- `import_config.py` -> import column aliases
-- `pdf_generator.py` -> PDF format generator
+## Default users
+- CCF: `ccf / ccf123`
+- Faculty Clerk: `clerk_snt / clerk123`, `clerk_com / clerk123`, `clerk_inter / clerk123`, `clerk_hum / clerk123`
+- Faculty Admin: `admin_snt / admin123`, `admin_com / admin123`, `admin_inter / admin123`, `admin_hum / admin123`
+- Final Member: `final_member / final123`
 
-## Generated artifacts
-- `university_rle_rpv.db`
-- `university_rle_rpv_schema.sql`
-- `university_rle_rpv_dump.sql`
-- `generated_letters/*.pdf`
+## Upload format
+Supported: `.csv`, `.xlsx`, `.dbf`
+
+Columns (recommended):
+- `name`, `prn`, `seat_no`, `sex`
+- `sem1`, `sem2`, `sem3`, `sem4`, `sem5`, `sem6`
+- `gcgpi`, `remark`, `result_status`
+
+Use sample file `sample_students.csv` for testing.

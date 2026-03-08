@@ -1,5 +1,3 @@
-UNIVERSITY RLE-RPV SYSTEM - FULL PROCESS
-========================================
 
 1) START
 - python -m venv .venv
@@ -61,3 +59,92 @@ C. Audit tab
 8) IMPORT STANDARD CUSTOMIZATION
 - edit `import_config.py`
 - change aliases in COLUMN_ALIASES to match your file structure
+RLE-RPV UNIVERSITY PORTAL - FULL PROCESS RUN GUIDE
+
+1) INSTALL + START
+------------------
+1. Open terminal in project folder.
+2. Run:
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   python app.py
+3. Open browser: http://localhost:5000
+
+2) DATABASE FILES (AUTO CREATED)
+--------------------------------
+After app start, these files are created in current folder:
+- rle_rpv.db          -> main runtime SQLite DB
+- rle_rpv_schema.sql  -> schema SQL definition
+- rle_rpv_dump.sql    -> SQL dump (updated after every create/update action)
+
+3) LOGIN DETAILS
+----------------
+CCF: ccf / ccf123
+Clerk users (faculty wise):
+- clerk_snt / clerk123
+- clerk_com / clerk123
+- clerk_inter / clerk123
+- clerk_hum / clerk123
+Admin users (faculty wise):
+- admin_snt / admin123
+- admin_com / admin123
+- admin_inter / admin123
+- admin_hum / admin123
+Final member: final_member / final123
+
+4) COMPLETE END-TO-END FLOW
+---------------------------
+STEP A - CCF FLOW
+A1. Login as CCF.
+A2. Create exam session (example: April 2025).
+A3. Upload faculty-wise student result data (.csv/.xlsx/.dbf).
+A4. Verify upload summary and audit logs.
+A5. Optional: Download SQL dump from CCF dashboard.
+
+STEP B - CLERK FLOW
+B1. Login with faculty clerk account.
+B2. Select session and search student by PRN or seat number.
+B3. For RLE:
+    - add missing sem GPI fields
+    - system recalculates CGPI in request payload
+B4. For RPV:
+    - check "If RPV, set Eligible" option
+    - status changes to ELIGIBLE and RPV removed from remark
+B5. Submit request to admin.
+B6. Track requests in tabs:
+    - Pending
+    - Approved
+    - Rejected
+    - Suggested Edit
+
+STEP C - ADMIN FLOW
+C1. Login with faculty admin account.
+C2. Open Pending requests.
+C3. Review payload and decide:
+    - Approve  -> student data updated + letter generated
+    - Reject   -> moves to Rejected (comment required)
+    - Suggest  -> moves to Suggested Edit (comment required)
+C4. Use status tabs for tracking approved/rejected/suggested records.
+
+STEP D - FINAL MEMBER FLOW
+D1. Login as final_member.
+D2. View date-wise + session-wise summary with pending counts.
+D3. Download:
+    - single letter
+    - selected letters ZIP
+    - day-wise CSV report
+D4. Update final state per record:
+    - PENDING
+    - DONE
+    - QUERY (with comment)
+
+5) SAMPLE DATA
+--------------
+Use sample_students.csv to test quick upload.
+
+6) TROUBLESHOOTING
+------------------
+- If login fails: ensure app started first time so users are seeded.
+- If .xlsx upload fails: verify openpyxl installed from requirements.
+- If DB lock issue occurs: stop duplicate running app processes.

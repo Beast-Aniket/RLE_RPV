@@ -1,0 +1,20 @@
+body {
+  background: #f4f7fb;
+}
+
+.card {
+  border: 0;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.08);
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  max-width: 340px;
+  font-size: 12px;
+}
