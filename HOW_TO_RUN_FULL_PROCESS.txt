@@ -1,70 +1,63 @@
-UNIVERSITY RLE-RPV SYSTEM - FULL RUN PROCESS (STREAMLIT)
-========================================================
+UNIVERSITY RLE-RPV SYSTEM - FULL PROCESS
+========================================
 
-1) START APPLICATION
---------------------
-1. Open terminal in project folder.
-2. Run:
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   streamlit run app.py
-3. Open browser URL shown by Streamlit (typically http://localhost:8501)
+1) START
+- python -m venv .venv
+- source .venv/bin/activate
+- pip install -r requirements.txt
+- streamlit run app.py
 
-2) FIRST LOGIN (CCF)
---------------------
-Use fixed credentials only:
-- Username: BEAST
-- Password: admin123
+2) LOGIN
+- Predefined CCF only:
+  username: BEAST
+  password: admin123
 
-3) CCF TASKS
-------------
-A) USER MANAGEMENT
-- Create users (roles: CLERK, ADMIN, FINAL)
-- Assign faculty for CLERK/ADMIN users
-- Modify users (password/role/faculty/active)
-- Disable users
+3) CCF WORKFLOW
+A. User Management tab
+   - create CLERK/ADMIN/FINAL users
+   - edit users
+   - disable users
 
-B) EXAM + SESSION SETUP
-- Select an existing exam OR create new exam
-- While creating exam, assign faculty to exam
-- Create session under selected exam
+B. Session/Exam Upload tab
+   - create session (only session name)
+   - choose faculty
+   - choose exam + program code from dropdown or create new
+   - upload students (.csv/.xlsx/.dbf)
 
-C) RESULT UPLOAD
-- Select session
-- Upload .csv / .xlsx / .dbf
-- Uploaded records become visible only to users of mapped faculty
+C. Audit tab
+   - view all activity logs
+   - download audit CSV
 
-4) CLERK TASKS (FACULTY-WISE)
-------------------------------
-- Login via CCF-created clerk user
-- Select session for clerk's faculty
-- Search student using PRN or Seat Number
-- Edit sem GPIs, remark, result status
-- For RPV, use eligible toggle
-- Submit request to Admin
+4) CLERK WORKFLOW
+- login with CCF-created clerk user
+- select session + exam
+- search student by PRN/Seat
+- enter missing GPIs
+- if all GPIs available and remark has RLE, it is auto-removed
+- for RPV, clerk removes remark manually and submits
 
-5) ADMIN TASKS (FACULTY-WISE)
-------------------------------
-- Login via CCF-created admin user
-- Review request list
-- Approve / Reject / Suggest Edit
-- On approval, student master updates and letter is generated
+5) ADMIN WORKFLOW
+- login with CCF-created admin user
+- view all or pending requests
+- filters: date, session, exam, PRN, seat
+- today's report / yesterday's report quick buttons
+- approve/reject/suggest
+- on approve, PDF is generated automatically
+- admin can bulk download PDFs by filters (ZIP)
 
-6) FINAL TASKS
---------------
-- Login via FINAL role user
-- Review generated letters
-- Update final state: PENDING / DONE / QUERY
-- Download individual letter text file
+6) FINAL MEMBER WORKFLOW
+- login with CCF-created FINAL user
+- filter by session/exam/day
+- download filtered entries CSV
+- select multiple requests and mark DONE/PENDING
+- PDF visibility available from approved entries
 
-7) DATABASE ARTIFACTS IN RUN DIRECTORY
---------------------------------------
-- university_rle_rpv.db (runtime sqlite database)
-- university_rle_rpv_schema.sql (schema file)
-- university_rle_rpv_dump.sql (auto-updated SQL dump)
+7) FILES GENERATED
+- university_rle_rpv.db
+- university_rle_rpv_schema.sql
+- university_rle_rpv_dump.sql
+- generated_letters/*.pdf
 
-8) NOTES
---------
-- CCF account BEAST cannot be removed.
-- If package installation fails due network, install on local machine with internet.
+8) IMPORT STANDARD CUSTOMIZATION
+- edit `import_config.py`
+- change aliases in COLUMN_ALIASES to match your file structure

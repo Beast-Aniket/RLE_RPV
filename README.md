@@ -1,15 +1,18 @@
-# University RLE-RPV System (Streamlit)
+# University RLE-RPV System (Streamlit, Modular)
 
-A complete Streamlit-based university workflow system with:
-- Fixed CCF login: `BEAST / admin123`
-- All other users created/managed by CCF (create/modify/disable)
-- Exam + Session creation with faculty mapping
-- Faculty-specific visibility (users see only assigned faculty exam/session data)
-- Result file upload (`.csv`, `.xlsx`, `.dbf`)
-- Clerk submission flow for RLE/RPV edits
-- Faculty Admin approval/rejection/suggest flow
-- Final section for letter processing and final states
-- Auto-created SQL artifacts in run directory
+This is a modular Streamlit implementation with separate files for each role and utilities.
+
+## Key changes
+- Fixed predefined CCF login only: `BEAST / admin123`
+- CCF-only user management (create/edit/disable users and assign role/faculty)
+- Session creation without start/end date
+- Upload flow includes exam name + program code management
+- Faculty-scoped data visibility
+- Clerk auto-removes `RLE` remark when all GPIs are entered
+- Admin advanced filters + PRN/Seat search + PDF generation + bulk PDF ZIP download
+- Final member filters + export filtered data + bulk mark done/pending
+- Separate file for import standards (`import_config.py`)
+- Separate file for PDF generation (`pdf_generator.py`)
 
 ## Run
 ```bash
@@ -19,10 +22,19 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Database files generated automatically
+## Modules
+- `app.py` -> entrypoint + routing by role
+- `db.py` -> schema/bootstrap/db dump
+- `auth.py` -> password hashing
+- `pages_ccf.py` -> CCF dashboard
+- `pages_clerk.py` -> clerk dashboard
+- `pages_admin.py` -> admin dashboard
+- `pages_final.py` -> final member dashboard
+- `import_config.py` -> import column aliases
+- `pdf_generator.py` -> PDF format generator
+
+## Generated artifacts
 - `university_rle_rpv.db`
 - `university_rle_rpv_schema.sql`
 - `university_rle_rpv_dump.sql`
-
-## Default Login
-- CCF only: `BEAST / admin123`
+- `generated_letters/*.pdf`
