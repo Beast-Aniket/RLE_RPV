@@ -1,0 +1,62 @@
+UNIVERSITY RLE-RPV SYSTEM - ENHANCED FULL PROCESS
+=================================================
+
+1) START
+- python -m venv .venv
+- source .venv/bin/activate
+- pip install -r requirements.txt
+- streamlit run app.py
+
+2) LOGIN
+- Predefined CCF only:
+  username: BEAST
+  password: admin123
+
+3) CCF WORKFLOW
+A. User Management
+   - Create user (CLERK / ADMIN / FINAL)
+   - Edit role/faculty/password/active state
+   - Disable or permanently delete user
+
+B. Session + Exam Upload
+   - Create session (only session name)
+   - Select faculty
+   - Search/select exam by name/program code OR create new exam
+   - Upload .csv/.xlsx/.dbf for selected session+exam+faculty
+
+C. Audit
+   - View full activity log
+   - Download audit CSV
+
+4) CLERK WORKFLOW
+- Login through CCF-created clerk user
+- Select session + exam
+- Search student by PRN or seat number
+- Enter missing GPIs
+- If all GPIs present and remark contains RLE, RLE removed automatically
+- For RPV, clerk removes remark manually and submits
+
+5) ADMIN WORKFLOW
+- Login through CCF-created admin user
+- Use metrics + quick report buttons (today/yesterday)
+- Apply filters (date/session/exam/prn/seat/status)
+- Approve / Reject / Suggest
+- On approve: student record updates + PDF is generated
+- Download filtered requests (CSV/Excel)
+- Bulk download filtered PDFs in ZIP
+
+6) FINAL MEMBER WORKFLOW
+- Filter approved data by session/exam/day
+- Export filtered CSV/Excel
+- Select all filtered or selected IDs
+- Mark selected DONE or PENDING in bulk
+
+7) GENERATED FILES
+- university_rle_rpv.db
+- university_rle_rpv_schema.sql
+- university_rle_rpv_dump.sql
+- generated_letters/*.pdf
+
+8) CUSTOMIZATION FILES
+- `import_config.py` for import column aliases
+- `pdf_generator.py` for PDF layout
