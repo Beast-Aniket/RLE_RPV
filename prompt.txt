@@ -1,0 +1,202 @@
+UNIVERSITY RLE-RPV SYSTEM - COMPLETE MASTER REQUIREMENTS PROMPT
+================================================================
+
+Project Goal
+------------
+Build a complete university-level result correction and processing system for RLE/RPV workflows, using role-based access, faculty-scoped data visibility, session and exam mapping, audit tracking, PDF generation, and final processing controls.
+
+Technology & Structure
+----------------------
+- Preferred stack: Python + Streamlit + SQLite.
+- Modular architecture with separate files/modules for clarity:
+  - app entrypoint and routing
+  - db/schema module
+  - auth module
+  - CCF page module
+  - Clerk page module
+  - Admin page module
+  - Final member page module
+  - import standard config module
+  - PDF generation module
+- Import standards must be configurable in one separate file (column aliases map).
+- PDF format must be configurable in one separate file.
+
+Mandatory Login Rule
+--------------------
+- Only one predefined login must exist by default:
+  - Username: BEAST
+  - Password: admin123
+  - Role: CCF
+- All other users must be created/managed only by CCF.
+
+Roles & Responsibilities
+------------------------
+1) CCF (super user)
+   - Create, edit, disable/delete users (CLERK / ADMIN / FINAL).
+   - Assign faculty for CLERK and ADMIN users.
+   - Create sessions (session name only; no start/end dates).
+   - Manage exams with:
+     - Exam Name
+     - Program Code
+     - Faculty mapping
+   - Upload student result files by selecting:
+     - Session
+     - Faculty
+     - Exam Name + Program Code
+   - Create new exam if not found in dropdown.
+   - Search exams by exam name or program code.
+   - Download full audit logs (CSV).
+
+2) Clerk (faculty-scoped)
+   - Can only view records mapped to clerk’s faculty.
+   - Select session + exam.
+   - Search students by PRN or Seat Number.
+   - View student details and edit missing GPIs.
+   - If all GPIs become available, remove “RLE” from remark automatically.
+   - If case is RPV, clerk removes remark manually and processes.
+   - Submit requests to admin.
+   - Track submitted requests and statuses.
+
+3) Admin (faculty-scoped)
+   - Can only view faculty-mapped requests.
+   - View all pending requests and full request history.
+   - Filters must support:
+     - Date range
+     - Session
+     - Exam
+     - PRN
+     - Seat number
+     - Request status
+   - Quick buttons:
+     - Today’s report
+     - Yesterday’s report
+   - Can approve / reject / suggest edit.
+   - On approval:
+     - student data updates
+     - PDF letter is generated automatically
+   - Can download:
+     - filtered request data (CSV/Excel)
+     - bulk PDFs (ZIP) by session/exam/day filters
+
+4) Final Member (generator)
+   - View only approved pipeline.
+   - Filters:
+     - session
+     - exam
+     - day/date
+   - Download filtered records in Excel/CSV.
+   - Select all filtered or manually select entries.
+   - Bulk actions:
+     - mark selected DONE
+     - mark selected PENDING
+   - Access generated PDFs.
+
+Core Functional Requirements
+----------------------------
+A) User Management
+- CCF can create users with role and optional faculty mapping.
+- CCF can edit password/role/faculty/active state.
+- CCF can disable or permanently delete users.
+- BEAST user cannot be removed as default root CCF account.
+
+B) Session Management
+- Session creation must require only session name.
+- Session should be reusable across exam uploads.
+
+C) Exam Management
+- Exam must include exam name + program code + faculty.
+- Exam dropdown should show “Exam Name (Program Code)”.
+- New exam creation should happen from upload flow if not found.
+
+D) Import & Upload
+- Support file types:
+  - .csv
+  - .xlsx
+  - .dbf
+- Normalize source columns through configurable alias mapping file.
+- Skip invalid rows safely and show inserted/skipped counts.
+- Save uploaded students mapped to selected session+exam+faculty.
+
+E) Student Result Fields
+- Name, PRN, Seat No, Sex
+- Sem1 to Sem6 GPI
+- CGPI, GCGPI
+- Remark
+- Result Status
+- CGPI should auto-calculate from available sem GPIs.
+
+F) Request Lifecycle
+- Clerk submits request -> status SUBMITTED_BY_CLERK.
+- Admin actions:
+  - ADMIN_APPROVED
+  - ADMIN_REJECTED
+  - ADMIN_SUGGESTED_EDIT
+- Approved items should generate PDF and become visible in final workflow.
+
+G) PDF Generation
+- Create letter PDF for approved requests.
+- PDF must include session, exam/program code, student identifiers, revised status, cgpi, remark, admin comment.
+- Store PDF path in DB for admin and final access.
+
+H) Final Workflow
+- Keep final state tracking (PENDING / DONE / QUERY optional).
+- Support bulk update of final states.
+- Allow filtered exports.
+
+I) Audit & Traceability
+- Log all critical actions:
+  - user create/update/disable/delete
+  - session/exam creation
+  - uploads
+  - clerk submissions
+  - admin decisions
+  - final state updates
+- Provide downloadable audit CSV.
+
+Database Requirements
+---------------------
+Use SQLite in running directory with generated artifacts:
+- runtime DB file
+- schema SQL file
+- SQL dump file updated on commits/writes
+
+Suggested tables:
+- users
+- exams
+- sessions
+- students
+- edit_requests
+- letters
+- final_actions
+- audit_logs
+
+Non-Functional Requirements
+---------------------------
+- Clean modular code for easy maintenance.
+- Faculty-level access control enforced in all role dashboards.
+- Safe updates and robust upsert behavior for final status entries.
+- Input validations for usernames, passwords, and upload data.
+- Friendly dashboard UI with summary metrics and filters.
+
+Deliverables
+------------
+1) Fully working modular application.
+2) requirements file.
+3) sample input file.
+4) README with run steps.
+5) full process run guide.
+6) this master prompt file.
+
+Run Steps (expected)
+--------------------
+1. python -m venv .venv
+2. source .venv/bin/activate
+3. pip install -r requirements.txt
+4. streamlit run app.py
+
+Default First Login
+-------------------
+- BEAST / admin123
+
+End of Master Prompt
+--------------------
